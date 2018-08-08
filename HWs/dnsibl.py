@@ -3,6 +3,7 @@ from pprint import pprint
 from http import HTTPStatus
 from bs4 import BeautifulSoup
 from prettytable import PrettyTable
+import itertools
 
 
 class Mhs():
@@ -13,6 +14,7 @@ class Mhs():
         basliklar = []  #basliklarin datasini tutacağım list
         col1text = []   #ilk kolonun datasini tutacağım list
         col2text = []
+        col3text = []
         resp = requests.get(f"{self.path}{site}.com")   #default pathin yanına girilen argümanı alıp yönlendiriyorum
         if resp.status_code == HTTPStatus.OK:
             soup = BeautifulSoup(resp.text, 'html.parser')
@@ -28,13 +30,25 @@ class Mhs():
             if col2 != []:
                 for i in range(0, len(col2), 1):
                     col2text.append(col2[i].text)
+            # col3 = soup.find("ul",{"class": "list"})
+            # if col3 != []:
+            #     for i in range(0, len(col3), 1):
+            #         col3text.append(col3.text)
+
 
         # pprint(col1text[0].split('\n'))
         ### pprint(col1text[0].split('\n'))
         x = PrettyTable()
         x.field_names = basliklar           #tablonun sütunlarını basliklar listemin elemanları olarak tanımlıyorum
+        #
+        x.add_column(x.field_names[0], col1text[0].split()+col1text[1].split())    #datanın içinde bolca \n var onlardan kurtulup kolonun içine atıyorum
+        # x.add_column(x.field_names[1], col2text[0].split())
+        # x.add_column(x.field_names[2], col3text[0].split('\n'))
 
-        x.add_column(x.field_names[0], col1text[0].split('\n'))    #datanın içinde bolca \n var onlardan kurtulup kolonun içine atıyorum
-   #    x.add_column(x.field_names[1], col2text[0].split('\n'))
-
+        # for title, lst in zip(basliklar, itertools.zip_longest(col1text, col2text, fillvalue="")):
+        #     x.add_column(title, lst)
         print(x.get_string(title=f"{site} Sitesinin Bilgileri"))
+
+        # pprint(col1text[0].split())
+
+
