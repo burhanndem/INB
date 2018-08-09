@@ -14,7 +14,7 @@ class Mhs():
         basliklar = []  #basliklarin datasini tutacağım list
         col1text = []   #ilk kolonun datasini tutacağım list
         col2text = []
-        col3text = []
+
         resp = requests.get(f"{self.path}{site}.com")   #default pathin yanına girilen argümanı alıp yönlendiriyorum
         if resp.status_code == HTTPStatus.OK:
             soup = BeautifulSoup(resp.text, 'html.parser')
